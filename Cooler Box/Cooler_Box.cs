@@ -16,9 +16,10 @@ namespace Cooler_Box
         public override string Description => "A usable cooler box. Half as good as the fridge."; // Short description of your mod
 
         public static GameObject cooler;
-        public AssetBundle assets;
+        private AssetBundle assets;
         private Camera camera;
         public static Transform lid;
+        private BoxCollider lidCollider;
 
         public override void ModSetup()
         {
@@ -44,6 +45,8 @@ namespace Cooler_Box
             cooler.layer = LayerMask.NameToLayer("Parts");
             cooler.tag = "PART";
             lid = cooler.transform.Find("Lid");
+            lid.gameObject.layer = LayerMask.NameToLayer("DontCollide");
+            lidCollider = cooler.GetComponents<BoxCollider>()[11];
             cooler.AddComponent<inCooler>();
             cooler.MakePickable();
 
@@ -103,6 +106,7 @@ namespace Cooler_Box
                             if(lid.gameObject.activeSelf)
                             {
                                 lid.gameObject.SetActive(false);
+                                lidCollider.isTrigger = true;
                                 if (cooler.transform.childCount > 2)
                                 {
                                     foreach (Component component in cooler.GetComponents<Component>())
@@ -123,6 +127,7 @@ namespace Cooler_Box
                             } else
                             {
                                 lid.gameObject.SetActive(true);
+                                lidCollider.isTrigger = false;
                             }
                         }
                         break;
