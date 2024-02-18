@@ -16,6 +16,8 @@ namespace Cooler_Box
 
         public GameObject cooler;
         public AssetBundle assets;
+        public Camera camera;
+        public Transform lid;
 
         public override void ModSetup()
         {
@@ -40,6 +42,7 @@ namespace Cooler_Box
             cooler.name = "Cooler(Clone)";
             cooler.layer = LayerMask.NameToLayer("Parts");
             cooler.tag = "PART";
+            lid = cooler.transform.Find("Lid");
             cooler.MakePickable();
 
             if(File.Exists(Path.Combine(Application.persistentDataPath, "CoolerBox.json")))
@@ -76,7 +79,31 @@ namespace Cooler_Box
         }
         private void Mod_Update()
         {
-            // Update is called once per frame
+            if(camera == null)
+            {
+                camera = Camera.main;
+            } else
+            {
+                foreach (RaycastHit hit in Physics.RaycastAll(camera.transform.position, camera.transform.forward, 1f))
+                {
+                    if(hit.collider.gameObject == cooler || hit.collider.gameObject == lid.gameObject)
+                    {
+                        PlayMakerGlobals.Instance.Variables.GetFsmBool("GUIuse").Value = true;
+                        if(lid.gameObject.activeSelf)
+                        {
+                            PlayMakerGlobals.Instance.Variables.GetFsmString("GUIinteraction").Value = "Open Lid";
+                        } else
+                        {
+                            PlayMakerGlobals.Instance.Variables.GetFsmString("GUIinteraction").Value = "Close Lid";
+                        }
+                        if(Input.GetKeyDown(KeyCode.F))
+                        {
+                            lid.gameObject.SetActive(!lid.gameObject.activeSelf);
+                        }
+                    }
+                }
+            }
+            
         }
     }
 
