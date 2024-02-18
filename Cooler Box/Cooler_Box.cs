@@ -133,6 +133,8 @@ namespace Cooler_Box
                                         rigidbody.mass = 1f;
                                     }
                                 }
+
+                                cooler.gameObject.GetComponent<Rigidbody>().mass = 1f;
                             } else
                             {
                                 lid.gameObject.SetActive(true);

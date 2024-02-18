@@ -17,6 +17,7 @@ namespace Cooler_Box
             {
                 if (other.gameObject.layer == 19 && (other.gameObject.CompareTag("PART") || other.gameObject.CompareTag("ITEM")) && (other.name.Contains("(itemx)") || other.name.Contains("(Clone)")))
                 {
+                    Cooler_Box.cooler.gameObject.GetComponent<Rigidbody>().mass += other.gameObject.GetComponent<Rigidbody>().mass;
                     joint = Cooler_Box.cooler.AddComponent<FixedJoint>();
                     joint.connectedBody = other.GetComponent<Rigidbody>();
                     other.transform.parent = Cooler_Box.cooler.transform;
