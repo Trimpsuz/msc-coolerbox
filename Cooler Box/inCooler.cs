@@ -11,21 +11,6 @@ namespace Cooler_Box
     {
         private static FixedJoint joint;
 
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.gameObject.CompareTag("PART"))
-            {
-                other.gameObject.GetComponent<Rigidbody>().drag = 10f;
-            }
-        }
-        private void OnTriggerExit(Collider other)
-        {
-            if (other.gameObject.CompareTag("PART"))
-            {
-                other.gameObject.GetComponent<Rigidbody>().drag = 1f;
-            }
-        }
-
         private void OnTriggerStay(Collider other)
         {
             if (Cooler_Box.lid.gameObject.activeSelf)
@@ -36,6 +21,8 @@ namespace Cooler_Box
                     joint.connectedBody = other.GetComponent<Rigidbody>();
                     other.transform.parent = Cooler_Box.cooler.transform;
                     other.gameObject.GetComponent<Rigidbody>().detectCollisions = false;
+                    other.gameObject.GetComponent<Rigidbody>().drag = 0f;
+                    other.gameObject.GetComponent<Rigidbody>().mass = 0f;
                 }
             }
         }

@@ -129,6 +129,8 @@ namespace Cooler_Box
                                         rigidbody.detectCollisions = true;
                                         rigidbody.constraints = 0;
                                         rigidbody.gameObject.transform.parent = null;
+                                        rigidbody.drag = 1f;
+                                        rigidbody.mass = 1f;
                                     }
                                 }
                             } else
