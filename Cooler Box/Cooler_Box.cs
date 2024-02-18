@@ -29,6 +29,7 @@ namespace Cooler_Box
             SetupFunction(Setup.OnSave, Mod_OnSave);
             SetupFunction(Setup.Update, Mod_Update);
             SetupFunction(Setup.ModSettings, Mod_Settings);
+            SetupFunction(Setup.PostLoad, Mod_PostLoad);
         }
 
         private void Mod_Settings()
@@ -37,8 +38,22 @@ namespace Cooler_Box
             // DO NOT put anything that isn't settings or keybinds in here!
         }
 
+        private void Mod_PostLoad()
+        {
+            if (!ModLoader.IsModPresent("FridgeAPI"))
+            {
+                ModConsole.Log("<color=red><b>Cooler Box: No Fridge API present! Mod won't work!</b></color>");
+                return;
+            }
+        }
+
         private void Mod_PreLoad()
         {
+            if (!ModLoader.IsModPresent("FridgeAPI"))
+            {
+                return;
+            }
+
             assets = LoadAssets.LoadBundle(Properties.Resources.cooler);
             cooler = assets.LoadAsset<GameObject>("cooler.prefab");
             cooler = Object.Instantiate(cooler);
@@ -70,6 +85,11 @@ namespace Cooler_Box
 
         private void Mod_OnLoad()
         {
+            if (!ModLoader.IsModPresent("FridgeAPI"))
+            {
+                return;
+            }
+
             if (!File.Exists(Path.Combine(Application.persistentDataPath, "CoolerBox.json")))
             {
                 cooler.transform.position = GameObject.Find("PLAYER").transform.position;
@@ -78,6 +98,11 @@ namespace Cooler_Box
 
         private void Mod_OnSave()
         {
+            if (!ModLoader.IsModPresent("FridgeAPI"))
+            {
+                return;
+            }
+
             using (FileStream stream = File.OpenWrite(Path.Combine(Application.persistentDataPath, "CoolerBox.json")))
             {
                 Save s = new Save(cooler.transform.position, cooler.transform.rotation);
@@ -92,7 +117,12 @@ namespace Cooler_Box
         }
         private void Mod_Update()
         {
-            if(camera == null)
+            if (!ModLoader.IsModPresent("FridgeAPI"))
+            {
+                return;
+            }
+
+            if (camera == null)
             {
                 camera = Camera.main;
             } else
