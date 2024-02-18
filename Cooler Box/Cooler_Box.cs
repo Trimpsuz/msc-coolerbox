@@ -17,7 +17,7 @@ namespace Cooler_Box
 
         public static GameObject cooler;
         public AssetBundle assets;
-        public Camera camera;
+        private Camera camera;
         public static Transform lid;
 
         public override void ModSetup()
@@ -124,8 +124,8 @@ namespace Cooler_Box
                             {
                                 lid.gameObject.SetActive(true);
                             }
-
                         }
+                        break;
                     }
                 }
             }
