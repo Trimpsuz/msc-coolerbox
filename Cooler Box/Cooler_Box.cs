@@ -23,6 +23,7 @@ namespace Cooler_Box
 
         public override void ModSetup()
         {
+            SetupFunction(Setup.PreLoad, Mod_PreLoad);
             SetupFunction(Setup.OnLoad, Mod_OnLoad);
             SetupFunction(Setup.OnSave, Mod_OnSave);
             SetupFunction(Setup.Update, Mod_Update);
@@ -35,7 +36,7 @@ namespace Cooler_Box
             // DO NOT put anything that isn't settings or keybinds in here!
         }
 
-        private void Mod_OnLoad()
+        private void Mod_PreLoad()
         {
             assets = LoadAssets.LoadBundle(Properties.Resources.cooler);
             cooler = assets.LoadAsset<GameObject>("cooler.prefab");
@@ -63,11 +64,17 @@ namespace Cooler_Box
                         cooler.transform.rotation = Quaternion.Euler(s.xRot, s.yRot, s.zRot);
                     }
                 }
-            } else
+            }
+        }
+
+        private void Mod_OnLoad()
+        {
+            if (!File.Exists(Path.Combine(Application.persistentDataPath, "CoolerBox.json")))
             {
                 cooler.transform.position = GameObject.Find("PLAYER").transform.position;
             }
         }
+
         private void Mod_OnSave()
         {
             using (FileStream stream = File.OpenWrite(Path.Combine(Application.persistentDataPath, "CoolerBox.json")))
