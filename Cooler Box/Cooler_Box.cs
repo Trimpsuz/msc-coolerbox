@@ -4,6 +4,7 @@ using System.Xml.Serialization;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.Collections;
+using FridgeAPI;
 
 namespace Cooler_Box
 {
@@ -114,6 +115,7 @@ namespace Cooler_Box
                             {
                                 lid.gameObject.SetActive(false);
                                 lidCollider.isTrigger = true;
+                                cooler.gameObject.GetComponent<Fridge>().customSpoilingRate = 0.015f;
                                 if (cooler.transform.childCount > 2)
                                 {
                                     foreach (Component component in cooler.GetComponents<Component>())
@@ -139,6 +141,7 @@ namespace Cooler_Box
                             {
                                 lid.gameObject.SetActive(true);
                                 lidCollider.isTrigger = false;
+                                cooler.gameObject.GetComponent<Fridge>().customSpoilingRate = 0.001f;
                             }
                         }
                         break;
