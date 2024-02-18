@@ -3,6 +3,7 @@ using System.IO;
 using System.Xml.Serialization;
 using UnityEngine;
 using Newtonsoft.Json;
+using System.Collections;
 
 namespace Cooler_Box
 {
@@ -14,10 +15,10 @@ namespace Cooler_Box
         public override string Version => "1.0"; // Version
         public override string Description => "A usable cooler box. Half as good as the fridge."; // Short description of your mod
 
-        public GameObject cooler;
+        public static GameObject cooler;
         public AssetBundle assets;
         public Camera camera;
-        public Transform lid;
+        public static Transform lid;
 
         public override void ModSetup()
         {
@@ -43,6 +44,7 @@ namespace Cooler_Box
             cooler.layer = LayerMask.NameToLayer("Parts");
             cooler.tag = "PART";
             lid = cooler.transform.Find("Lid");
+            cooler.AddComponent<inCooler>();
             cooler.MakePickable();
 
             if(File.Exists(Path.Combine(Application.persistentDataPath, "CoolerBox.json")))
@@ -98,7 +100,31 @@ namespace Cooler_Box
                         }
                         if(Input.GetKeyDown(KeyCode.F))
                         {
-                            lid.gameObject.SetActive(!lid.gameObject.activeSelf);
+                            if(lid.gameObject.activeSelf)
+                            {
+                                lid.gameObject.SetActive(false);
+                                if (cooler.transform.childCount > 2)
+                                {
+                                    foreach (Component component in cooler.GetComponents<Component>())
+                                    {
+                                        if (component.GetType().Name == "FixedJoint")
+                                        {
+                                            Object.Destroy(component);
+                                        }
+                                    }
+
+                                    foreach (Rigidbody rigidbody in cooler.GetComponentsInChildren<Rigidbody>())
+                                    {
+                                        rigidbody.detectCollisions = true;
+                                        rigidbody.constraints = 0;
+                                        rigidbody.gameObject.transform.parent = null;
+                                    }
+                                }
+                            } else
+                            {
+                                lid.gameObject.SetActive(true);
+                            }
+
                         }
                     }
                 }
