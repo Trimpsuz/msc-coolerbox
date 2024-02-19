@@ -1,9 +1,7 @@
 ﻿using MSCLoader;
 using System.IO;
-using System.Xml.Serialization;
 using UnityEngine;
 using Newtonsoft.Json;
-using System.Collections;
 using FridgeAPI;
 
 namespace Cooler_Box
@@ -21,6 +19,9 @@ namespace Cooler_Box
         private Camera camera;
         public static Transform lid;
         private BoxCollider lidCollider;
+        private GameObject coolerStore;
+        private GameObject gameObject;
+        public static bool coolerPurchased;
 
         public override void ModSetup()
         {
@@ -55,8 +56,8 @@ namespace Cooler_Box
             }
 
             assets = LoadAssets.LoadBundle(Properties.Resources.cooler);
-            cooler = assets.LoadAsset<GameObject>("cooler.prefab");
-            cooler = Object.Instantiate(cooler);
+            gameObject = assets.LoadAsset<GameObject>("cooler.prefab");
+            cooler = Object.Instantiate(gameObject);
             assets.Unload(false);
             cooler.name = "Cooler(Clone)";
             cooler.layer = LayerMask.NameToLayer("Parts");
@@ -78,8 +79,13 @@ namespace Cooler_Box
                         Save s = serializer.Deserialize<Save>(reader);
                         cooler.transform.position = new Vector3(s.x, s.y, s.z);
                         cooler.transform.rotation = Quaternion.Euler(s.xRot, s.yRot, s.zRot);
+                        coolerPurchased = s.coolerPurchased;
                     }
                 }
+            } else
+            {
+                cooler.GetComponent<Rigidbody>().isKinematic = true;
+                cooler.transform.position = new Vector3(-1551.303f, 4.8f, 1181.904f);
             }
         }
 
@@ -90,9 +96,13 @@ namespace Cooler_Box
                 return;
             }
 
-            if (!File.Exists(Path.Combine(Application.persistentDataPath, "CoolerBox.json")))
-            {
-                cooler.transform.position = GameObject.Find("PLAYER").transform.position;
+            if(!coolerPurchased)
+            { 
+                cooler.SetActive(false);
+                this.coolerStore = Object.Instantiate(gameObject);
+                Object.Destroy(gameObject);
+                CoolerStore coolerStore = this.coolerStore.AddComponent<CoolerStore>();
+                coolerStore.cooler = cooler;
             }
         }
 
@@ -105,7 +115,7 @@ namespace Cooler_Box
 
             using (FileStream stream = File.OpenWrite(Path.Combine(Application.persistentDataPath, "CoolerBox.json")))
             {
-                Save s = new Save(cooler.transform.position, cooler.transform.rotation);
+                Save s = new Save(cooler.transform.position, cooler.transform.rotation, coolerPurchased);
                 JsonSerializer serializer = new JsonSerializer();
                 using (StreamWriter sw = new StreamWriter(stream))
                 using (JsonWriter writer = new JsonTextWriter(sw))
@@ -186,9 +196,10 @@ namespace Cooler_Box
     {
         public float x, y, z;
         public float xRot, yRot, zRot;
+        public bool coolerPurchased;
 
         public Save() { }
-        public Save(Vector3 pos, Quaternion rot)
+        public Save(Vector3 pos, Quaternion rot, bool purchased)
         {
             x = pos.x;
             y = pos.y;
@@ -197,6 +208,8 @@ namespace Cooler_Box
             xRot = rot.eulerAngles.x;
             yRot = rot.eulerAngles.y;
             zRot = rot.eulerAngles.z;
+
+            coolerPurchased = purchased;
         }
     }
 }

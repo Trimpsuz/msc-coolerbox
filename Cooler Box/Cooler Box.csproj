@@ -64,6 +64,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CoolerStore.cs" />
     <Compile Include="Cooler_Box.cs" />
     <Compile Include="inCooler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
