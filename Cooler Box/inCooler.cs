@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using FridgeAPI;
 using UnityEngine;
-using MSCLoader;
 
 namespace Cooler_Box
 {
@@ -15,7 +11,7 @@ namespace Cooler_Box
         {
             if (Cooler_Box.lid.gameObject.activeSelf)
             {
-                if ((other.gameObject.layer == 19 && (other.gameObject.CompareTag("PART") || other.gameObject.CompareTag("ITEM")) && (other.name.Contains("(itemx)") || other.name.Contains("(Clone)"))) && other.gameObject.name != "Cooler(Clone)")
+                if (other.gameObject.layer == 19 && (other.gameObject.GetComponent<SpoilableFood>() != null || other.gameObject.name.Contains("juice") || other.gameObject.name.Contains("yeast") || other.gameObject.name.Contains("sugar") || other.gameObject.name.Contains("ground coffee") || other.gameObject.name.Contains("potato chips")) && other.gameObject.name != "Cooler(Clone)")
                 {
                     Cooler_Box.cooler.gameObject.GetComponent<Rigidbody>().mass += other.gameObject.GetComponent<Rigidbody>().mass;
                     joint = Cooler_Box.cooler.AddComponent<FixedJoint>();
