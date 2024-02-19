@@ -24,6 +24,7 @@ namespace Cooler_Box
 
         private void Start()
         {
+            Destroy(GetComponent<Fridge>());
             transform.SetParent(GameObject.Find("STORE").transform.Find("LOD/ActivateStore/FoodProducts"));
             transform.position = new Vector3(-1546.887f, 4.010013f, 1184.129f);
             transform.eulerAngles = new Vector3(270f, 147f, 180f);
