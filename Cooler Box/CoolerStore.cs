@@ -26,7 +26,9 @@ namespace Cooler_Box
         {
             Destroy(GetComponent<Fridge>());
             transform.SetParent(GameObject.Find("STORE").transform.Find("LOD/ActivateStore/FoodProducts"));
-            transform.position = new Vector3(-1546.887f, 4.010013f, 1184.129f);
+            gameObject.layer = LayerMask.NameToLayer("DontCollide");
+            gameObject.GetComponent<Rigidbody>().isKinematic = true;
+            transform.position = new Vector3(-1546.887f, 3.901165f, 1184.129f);
             transform.eulerAngles = new Vector3(270f, 147f, 180f);
             lid = transform.Find("Lid");
             handle = transform.Find("Handle");
