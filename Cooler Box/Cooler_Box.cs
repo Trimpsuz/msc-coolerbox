@@ -84,6 +84,7 @@ namespace Cooler_Box
                 }
             } else
             {
+                coolerPurchased = false;
                 cooler.GetComponent<Rigidbody>().isKinematic = true;
                 cooler.transform.position = new Vector3(-1551.303f, 4.8f, 1181.904f);
                 cooler.transform.eulerAngles = new Vector3(270f, 328f, 0f);
