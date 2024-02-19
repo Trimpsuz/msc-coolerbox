@@ -1,10 +1,9 @@
 ﻿using FridgeAPI;
 using HutongGames.PlayMaker;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using UnityEngine;
 
 namespace Cooler_Box
@@ -17,10 +16,12 @@ namespace Cooler_Box
         private CoolerStoreFSM coolerStoreFSM;
         private bool orderToPay;
         public GameObject cooler;
+        public Vector3 coolerPos;
         private bool mouseOver;
         private Camera camera;
         private Transform lid;
         private Transform handle;
+        public bool cooler1;
 
         private void Start()
         {
@@ -28,7 +29,7 @@ namespace Cooler_Box
             transform.SetParent(GameObject.Find("STORE").transform.Find("LOD/ActivateStore/FoodProducts"));
             gameObject.layer = LayerMask.NameToLayer("DontCollide");
             gameObject.GetComponent<Rigidbody>().isKinematic = true;
-            transform.position = new Vector3(-1546.887f, 3.901165f, 1184.129f);
+            transform.position = coolerPos;
             transform.eulerAngles = new Vector3(270f, 147f, 180f);
             lid = transform.Find("Lid");
             handle = transform.Find("Handle");
@@ -57,6 +58,9 @@ namespace Cooler_Box
                 {
                     if (hit.collider.gameObject == gameObject || hit.collider.gameObject == lid.gameObject || hit.collider.gameObject == handle.gameObject)
                     {
+                        if (!cooler1 && (!Cooler_Box.cooler1inRegister && !Cooler_Box.cooler1Purchased)) return;
+                        if (cooler1 && (Cooler_Box.cooler1inRegister && Cooler_Box.coolerinRegister)) return;
+
                         if (orderToPay)
                         {
                             mouseOver = true;
@@ -64,6 +68,8 @@ namespace Cooler_Box
                             guiInteraction.Value = "Cooler Box 50 mk";
                             if (Input.GetMouseButtonDown(1))
                             {
+                                if(cooler1) Cooler_Box.cooler1inRegister = false;
+                                if(!cooler1) Cooler_Box.coolerinRegister = false;
                                 mouseOver = true;
                                 orderToPay = false;
                                 GetComponent<MeshRenderer>().enabled = true;
@@ -81,6 +87,8 @@ namespace Cooler_Box
                             guiInteraction.Value = "Cooler Box 50 mk";
                             if (Input.GetMouseButtonDown(0))
                             {
+                                if(cooler1) Cooler_Box.cooler1inRegister = true;
+                                if (!cooler1) Cooler_Box.coolerinRegister = true;
                                 mouseOver = true;
                                 orderToPay = true;
                                 GetComponent<MeshRenderer>().enabled = false;
@@ -107,16 +115,31 @@ namespace Cooler_Box
         {
             if(orderToPay)
             {
-                orderToPay = false;
-                cooler.SetActive(true);
-                cooler.GetComponent<Rigidbody>().isKinematic = false;
-                FsmState fsmState = cashRegister.FsmStates.FirstOrDefault((FsmState state) => state.Name == "Purchase");
-                List<FsmStateAction> list = fsmState.Actions.ToList<FsmStateAction>();
-                list.Remove(coolerStoreFSM);
-                fsmState.Actions = list.ToArray();
-                Destroy(gameObject);
-                Cooler_Box.coolerPurchased = true;
+                StartCoroutine(OrderPurhcaseCoroutine());
+                if(!cooler1)
+                {
+                    Cooler_Box.coolerPurchased = true;
+                    Cooler_Box.coolerinRegister = false;
+
+                } else
+                {
+                    Cooler_Box.cooler1inRegister = false;
+                    Cooler_Box.cooler1Purchased = true;
+                }
             }
+        }
+
+        IEnumerator OrderPurhcaseCoroutine()
+        {
+            if (cooler1 && Cooler_Box.coolerinRegister && Cooler_Box.cooler1inRegister)
+            {
+                yield return new WaitForSeconds(0.5f);
+            }
+            orderToPay = false;
+            cooler.SetActive(true);
+            cooler.GetComponent<Rigidbody>().isKinematic = false;
+            cooler.GetComponent<Rigidbody>().detectCollisions = true;
+            Destroy(gameObject);
         }
 
         private class CoolerStoreFSM : FsmStateAction
@@ -124,7 +147,7 @@ namespace Cooler_Box
             public override void OnEnter()
             {
                 action();
-                base.Finish();
+                Finish();
             }
 
             public Action action;
