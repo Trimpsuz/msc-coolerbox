@@ -32,6 +32,7 @@ namespace Cooler_Box
 
         public override void ModSetup()
         {
+            SetupFunction(Setup.OnNewGame, Mod_NewGame);
             SetupFunction(Setup.PreLoad, Mod_PreLoad);
             SetupFunction(Setup.OnLoad, Mod_OnLoad);
             SetupFunction(Setup.OnSave, Mod_OnSave);
@@ -44,6 +45,14 @@ namespace Cooler_Box
         {
             // All settings should be created here. 
             // DO NOT put anything that isn't settings or keybinds in here!
+        }
+
+        private void Mod_NewGame()
+        {
+            if (File.Exists(Path.Combine(Application.persistentDataPath, "CoolerBox.json")))
+            {
+                File.Delete(Path.Combine(Application.persistentDataPath, "CoolerBox.json"));
+            }
         }
 
         private void Mod_PostLoad()
