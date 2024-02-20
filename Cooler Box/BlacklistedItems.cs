@@ -3,6 +3,7 @@
     public class BlacklistedItems
     {
         public static string[] blacklistedItems = {
+            "cooler",
             "motor oil",
             "coolant",
             "fire extinguisher",

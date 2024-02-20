@@ -71,6 +71,9 @@ namespace Cooler_Box
                 return;
             }
 
+            coolerinRegister = false;
+            cooler1inRegister = false;
+
             assets = LoadAssets.LoadBundle(Properties.Resources.cooler);
             gameObject = assets.LoadAsset<GameObject>("cooler.prefab");
             cooler = Object.Instantiate(gameObject);
@@ -134,9 +137,6 @@ namespace Cooler_Box
             {
                 return;
             }
-
-            coolerinRegister = false;
-            cooler1inRegister = false;
 
             if(!coolerPurchased)
             { 
