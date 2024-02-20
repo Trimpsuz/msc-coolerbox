@@ -11,8 +11,8 @@ namespace Cooler_Box
         public override string ID => "Cooler_Box"; // Your (unique) mod ID 
         public override string Name => "Cooler Box"; // Your mod name
         public override string Author => "Trimpsuz"; // Name of the Author (your name)
-        public override string Version => "1.0"; // Version
-        public override string Description => "A usable cooler box. Half as good as the fridge."; // Short description of your mod
+        public override string Version => "1.1.2"; // Version
+        public override string Description => "Introduces two new cooler boxes to Teimo's store. Half as effective as the regular fridge while closed, and slightly over twice as effective as nothing while open."; // Short description of your mod
 
         public static GameObject cooler;
         public static GameObject cooler1;
