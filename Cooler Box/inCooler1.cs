@@ -1,4 +1,5 @@
 ﻿using FridgeAPI;
+using System.Linq;
 using UnityEngine;
 
 namespace Cooler_Box
@@ -11,7 +12,7 @@ namespace Cooler_Box
         {
             if (Cooler_Box.lid1.gameObject.activeSelf)
             {
-                if (other.gameObject.layer == 19 && (other.gameObject.GetComponent<SpoilableFood>() != null || other.gameObject.name.Contains("juice") || other.gameObject.name.Contains("yeast") || other.gameObject.name.Contains("sugar") || other.gameObject.name.Contains("ground coffee") || other.gameObject.name.Contains("potato chips")) && other.gameObject.name != "Cooler(Clone)")
+                if (other.gameObject.layer == 19 && (other.gameObject.CompareTag("PART") || other.gameObject.CompareTag("ITEM")) && !BlacklistedItems.blacklistedItems.Any(blacklistedItem => other.gameObject.name.Contains(blacklistedItem.ToLower())))
                 {
                     Cooler_Box.cooler1.gameObject.GetComponent<Rigidbody>().mass += other.gameObject.GetComponent<Rigidbody>().mass;
                     joint = Cooler_Box.cooler1.AddComponent<FixedJoint>();
