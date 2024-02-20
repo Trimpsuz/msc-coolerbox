@@ -135,6 +135,9 @@ namespace Cooler_Box
                 return;
             }
 
+            coolerinRegister = false;
+            cooler1inRegister = false;
+
             if(!coolerPurchased)
             { 
                 cooler.SetActive(false);
