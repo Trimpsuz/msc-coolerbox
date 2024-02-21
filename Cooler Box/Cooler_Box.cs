@@ -207,9 +207,6 @@ namespace Cooler_Box
             {
                 foreach (RaycastHit hit in Physics.RaycastAll(camera.transform.position, camera.transform.forward, 1f))
                 {
-                    if (hit.collider.gameObject != cooler && hit.collider.gameObject != lid.gameObject && hit.collider.gameObject != cooler1 && hit.collider.gameObject != lid1.gameObject) break;
-
-                    ModConsole.Log(hit.collider.gameObject.name);
                     if(hit.collider.gameObject == cooler || hit.collider.gameObject == lid.gameObject)
                     {
                         PlayMakerGlobals.Instance.Variables.GetFsmBool("GUIuse").Value = true;
