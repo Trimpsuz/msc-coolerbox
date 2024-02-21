@@ -85,7 +85,9 @@ namespace Cooler_Box
             lid = cooler.transform.Find("Lid");
             lid.gameObject.layer = LayerMask.NameToLayer("DontCollide");
             lidCollider = cooler.GetComponents<BoxCollider>()[11];
-            cooler.AddComponent<inCooler>();
+            inCooler inCooler = cooler.AddComponent<inCooler>();
+            inCooler.cooler = cooler;
+            inCooler.lid = lid;
             cooler.MakePickable();
 
             cooler1.name = "Cooler(Clone)";
@@ -94,7 +96,9 @@ namespace Cooler_Box
             lid1 = cooler1.transform.Find("Lid");
             lid1.gameObject.layer = LayerMask.NameToLayer("DontCollide");
             lid1Collider = cooler1.GetComponents<BoxCollider>()[11];
-            cooler1.AddComponent<inCooler1>();
+            inCooler inCooler1 = cooler1.AddComponent<inCooler>();
+            inCooler1.cooler = cooler1;
+            inCooler1.lid = lid1;
             cooler1.MakePickable();
 
             if (File.Exists(Path.Combine(Application.persistentDataPath, "CoolerBox.json")))
