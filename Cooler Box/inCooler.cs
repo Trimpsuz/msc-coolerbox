@@ -14,7 +14,7 @@ namespace Cooler_Box
         {
             if (lid.gameObject.activeSelf)
             {
-                if(other.gameObject.layer == 19 && (other.gameObject.CompareTag("PART") || other.gameObject.CompareTag("ITEM")) && !BlacklistedItems.blacklistedItems.Any(blacklistedItem => other.gameObject.name.ToLower().Contains(blacklistedItem)))
+                if(other.gameObject.layer == 19 && (other.gameObject.CompareTag("PART") || other.gameObject.CompareTag("ITEM")) && (!BlacklistedItems.blacklistedItems.Any(blacklistedItem => other.gameObject.name.ToLower().Contains(blacklistedItem)) || other.gameObject.name.ToLower().Contains("grilled")))
                 {
                     cooler.gameObject.GetComponent<Rigidbody>().mass += other.gameObject.GetComponent<Rigidbody>().mass;
                     joint = cooler.AddComponent<FixedJoint>();
